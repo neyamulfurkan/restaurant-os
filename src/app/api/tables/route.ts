@@ -12,7 +12,7 @@ const tableSchema = z.object({
   height: z.number().min(40).max(200).default(80),
 });
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession();
     if (!session) {
