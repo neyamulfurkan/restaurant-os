@@ -3,12 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/providers';
 import { I18nProvider } from '@/i18n/i18nContext';
-import dynamic from 'next/dynamic';
 import { PageTransition } from '@/components/shared/PageTransition';
-
-const Toaster = dynamic(() => import('@/components/ui/toaster').then(mod => ({ default: mod.Toaster })), {
-  ssr: false,
-});
+import { Toaster } from '@/components/ui/toaster';
 import { SettingsLoader } from '@/components/shared/SettingsLoader';
 
 const inter = Inter({

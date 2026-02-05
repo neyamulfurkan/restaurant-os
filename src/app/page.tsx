@@ -311,7 +311,7 @@ export default function HomePage() {
       <ChatbotWidget restaurantId="rest123456789" />
     </div>
   );
-  }
+}
 
 // Hero Media Component
 function HeroMedia() {
