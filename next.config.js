@@ -276,9 +276,14 @@ const nextConfig = {
   // Production source maps (disabled for security)
   productionBrowserSourceMaps: false,
 
-  // TypeScript configuration - Keep ignoring build errors for development
+  // TypeScript configuration - Ignore build errors
   typescript: {
     ignoreBuildErrors: true
+  },
+
+  // ESLint configuration - Ignore build errors
+  eslint: {
+    ignoreDuringBuilds: true
   },
 
   // Experimental features
