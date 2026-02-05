@@ -4,7 +4,7 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development' || true, // Always disable for now
+  disable: process.env.NODE_ENV === 'development',
   runtimeCaching: [
     {
       urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
@@ -134,7 +134,6 @@ const withPWA = require('next-pwa')({
         const isSameOrigin = self.origin === url.origin;
         if (!isSameOrigin) return false;
         const pathname = url.pathname;
-        // Exclude API routes from caching
         if (pathname.startsWith('/api/')) return false;
         return true;
       },
@@ -154,7 +153,6 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
   reactStrictMode: true,
   
-  // Image optimization configuration
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
     remotePatterns: [
@@ -182,9 +180,7 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
   },
 
-  // Webpack configuration
   webpack: (config, { isServer }) => {
-    // Fix for canvas module (used by some PDF libraries)
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -193,7 +189,6 @@ const nextConfig = {
       };
     }
 
-    // Enable top-level await
     config.experiments = {
       ...config.experiments,
       topLevelAwait: true
@@ -202,7 +197,6 @@ const nextConfig = {
     return config;
   },
 
-  // API routes configuration
   async rewrites() {
     return [
       {
@@ -216,7 +210,6 @@ const nextConfig = {
     ];
   },
 
-  // Headers for security and CORS
   async headers() {
     return [
       {
@@ -231,60 +224,31 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(self)'
-          }
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' }
         ]
       }
     ];
   },
 
-  // Compression
   compress: true,
-
-  // Power optimizations
   poweredByHeader: false,
-
-  // Production source maps (disabled for security)
   productionBrowserSourceMaps: false,
 
-  // ESLint configuration - MODIFIED TO IGNORE ERRORS
   eslint: {
     ignoreDuringBuilds: true,
     dirs: ['src']
   },
 
-  // TypeScript configuration - MODIFIED TO IGNORE ERRORS
   typescript: {
     ignoreBuildErrors: true
   },
 
-  // Experimental features
   experimental: {
     optimizePackageImports: [
       '@/components/ui',
@@ -300,10 +264,8 @@ const nextConfig = {
     optimisticClientCache: true,
   },
 
-  // SWC minification
   swcMinify: true,
 
-  // Optimize bundle
   modularizeImports: {
     '@/components/ui': {
       transform: '@/components/ui/{{member}}',
@@ -313,11 +275,8 @@ const nextConfig = {
     },
   },
 
-  // Output configuration (standalone for Docker/self-hosting)
-  // Remove or set to undefined for Vercel
   output: process.env.VERCEL ? undefined : 'standalone',
 
-  // Environment variables made available to browser
   env: {
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || 'RestaurantOS',
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
