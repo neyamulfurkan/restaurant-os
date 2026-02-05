@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:wght@100;300;400;500;700;900&family=Open+Sans:wght@300..800&family=Lato:wght@100;300;400;700;900&family=Montserrat:wght@100..900&family=Poppins:wght@100..900&family=Raleway:wght@100..900&family=Playfair+Display:wght@400..900&family=Merriweather:wght@300;400;700;900&family=Nunito:wght@200..1000&family=Ubuntu:wght@300;400;500;700&family=PT+Sans:wght@400;700&family=Noto+Sans:wght@100..900&family=Mukta:wght@200;300;400;500;600;700;800&family=Rubik:wght@300..900&family=Work+Sans:wght@100..900&family=Karla:wght@200..800&family=Source+Sans+Pro:wght@200;300;400;600;700;900&family=Oswald:wght@200..700&family=Quicksand:wght@300..700&family=Bebas+Neue&family=Barlow:wght@100;200;300;400;500;600;700;800;900&family=Oxygen:wght@300;400;700&family=Libre+Franklin:wght@100..900&family=Architects+Daughter&family=Crimson+Text:wght@400;600;700&family=Dosis:wght@200..800&family=Josefin+Sans:wght@100..700&family=Abril+Fatface&family=Comfortaa:wght@300..700&family=Dancing+Script:wght@400..700&family=Pacifico&family=Lobster&family=Righteous&family=Satisfy&family=Caveat:wght@400..700&family=Indie+Flower&family=Shadows+Into+Light&family=Permanent+Marker&family=Amatic+SC:wght@400;700&family=Courgette&family=Great+Vibes&family=Kaushan+Script&family=Cabin:wght@400..700&family=Exo+2:wght@100..900&family=Fjalla+One&family=Manrope:wght@200..800&family=Space+Grotesk:wght@300..700&family=DM+Sans:wght@100..1000&family=Plus+Jakarta+Sans:wght@200..800&family=Outfit:wght@100..900&family=Sora:wght@100..800&family=Lexend:wght@100..900&family=Red+Hat+Display:wght@300..900&family=Epilogue:wght@100..900&family=Inter+Tight:wght@100..900&family=Bricolage+Grotesque:wght@200..800&family=Onest:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Color Variables (HSL values for shadcn/ui consistency) */
+    --color-primary: 199 89% 48%;
+    --color-accent: 0 84% 60%;
+    --color-success: 16 185 129;
+    --color-warning: 245 158 11;
+    --color-error: 239 68 68;
+
+    /* shadcn/ui Variables - Will be overridden by settings */
+    --page-bg: 248 250 252;
+    --background: 255 255 255;
+    --text-primary: 23 23 23;
+    --text-secondary: 82 82 82;
+    --text-muted: 163 163 163;
+    --text: var(--foreground);
+    --content-bg: var(--card);
+    --foreground: var(--text-primary);
+    --card: 255 255 255;
+    --card-foreground: 23 23 23;
+    --popover: 255 255 255;
+    --popover-foreground: 23 23 23;
+    --header-bg: 255 255 255;
+    --header-text: 23 23 23;
+    --footer-bg: 23 23 23;
+    --footer-text: 250 250 250;
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 84% 60%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 89.8%;
+    --ring: 199 89% 48%;
+    --radius: 0.5rem;
+
+    /* Font Variables */
+    --font-body: 'Inter', sans-serif;
+    --font-heading: 'Inter', sans-serif;
+
+    /* Spacing Variables (8px base) */
+    --spacing-xs: 0.25rem; /* 4px */
+    --spacing-sm: 0.5rem; /* 8px */
+    --spacing-md: 1rem; /* 16px */
+    --spacing-lg: 1.5rem; /* 24px */
+    --spacing-xl: 2rem; /* 32px */
+    --spacing-2xl: 3rem; /* 48px */
+
+    /* Border Radius Variables */
+    --radius-sm: 0.25rem; /* 4px */
+    --radius-md: 0.5rem; /* 8px */
+    --radius-lg: 1rem; /* 16px */
+    --radius-full: 9999px;
+
+    /* Shadow Variables */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 84% 60%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 199 89% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    background-color: rgb(var(--page-bg));
+    color: rgb(var(--text-primary));
+    font-family: var(--font-body);
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+  
+  /* Calendar specific styling */
+  .rdp {
+    --rdp-cell-size: 48px;
+    --rdp-accent-color: hsl(var(--primary));
+    --rdp-text-color: rgb(var(--text-primary));
+    --rdp-background-color: hsl(var(--card));
+  }
+  
+  .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+    background-color: hsl(var(--primary) / 0.1);
+  }
+  
+  .rdp-day_selected {
+    background-color: hsl(var(--primary)) !important;
+    color: white !important;
+    font-weight: 600;
+  }
+  
+  .rdp-day_today:not(.rdp-day_selected) {
+    font-weight: 700;
+    color: hsl(var(--primary));
+    background-color: hsl(var(--primary) / 0.15);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+  
+  /* React Day Picker (Calendar) Styling */
+  .rdp {
+    --rdp-cell-size: 48px;
+    --rdp-accent-color: hsl(var(--primary));
+    --rdp-background-color: white;
+  }
+  
+  .rdp-months {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .rdp-month {
+    width: 100%;
+  }
+  
+  .rdp-caption {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+  }
+  
+  .rdp-caption_label {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgb(var(--text-primary)) !important;
+  }
+  
+  .rdp-nav {
+    display: flex;
+    gap: 0.25rem;
+  }
+  
+  .rdp-nav_button {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    background: transparent;
+    border-radius: 0.375rem;
+    color: rgb(var(--text-secondary));
+    transition: all 0.2s;
+  }
+  
+  .rdp-nav_button:hover:not(:disabled) {
+    background-color: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+  }
+  
+  .rdp-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .rdp-head_row {
+    display: flex;
+    margin-bottom: 0.5rem;
+  }
+  
+  .rdp-head_cell {
+    width: 3rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(var(--text-secondary)) !important;
+  }
+  
+  .rdp-tbody {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .rdp-row {
+    display: flex;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  
+  .rdp-cell {
+    width: 3rem;
+    height: 3rem;
+    text-align: center;
+    position: relative;
+  }
+  
+  .rdp-button {
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border-radius: 0.5rem;
+    font-weight: 400;
+    color: rgb(var(--text-primary)) !important;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .rdp-button:hover:not(:disabled):not(.rdp-day_selected) {
+    background-color: hsl(var(--primary) / 0.1);
+  }
+  
+  .rdp-day_selected {
+    background-color: hsl(var(--primary)) !important;
+    color: white !important;
+    font-weight: 600;
+  }
+  
+  .rdp-day_selected:hover {
+    background-color: hsl(var(--primary) / 0.9) !important;
+  }
+  
+  .rdp-day_today:not(.rdp-day_selected) {
+    font-weight: 700;
+    background-color: hsl(var(--primary) / 0.15);
+    color: hsl(var(--primary));
+  }
+  
+  .rdp-day_outside {
+    color: rgb(var(--text-muted));
+  }
+  
+  .rdp-day_disabled {
+    color: rgb(var(--text-muted));
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .rdp-day_hidden {
+    visibility: hidden;
+  }
+}
+
+/* Custom Animations */
+@layer utilities {
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+  }
+
+  /* Z-index hierarchy */
+  .z-header {
+    z-index: 50;
+  }
+  
+  .z-modal {
+    z-index: 50;
+  }
+  
+  .z-tooltip {
+    z-index: 60;
+  }
+
+  /* Pulse animation for attention elements */
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  .pulse-slow {
+    animation: pulse-slow 2s ease-in-out infinite;
+  }
+
+  /* Fade in on scroll animation */
+  .fade-in-up {
+    @apply opacity-0 translate-y-8 transition-all duration-500;
+  }
+
+  .fade-in-up.visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Focus visible styles for accessibility */
+  .focus-visible:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl;
+  }
+
+  /* Button scale effect */
+  .button-scale {
+    @apply transition-transform duration-200 active:scale-95;
+  }
+
+  /* Glassmorphism effect */
+  .glassmorphism {
+    @apply bg-white/80 backdrop-blur-md border border-white/20;
+  }
+}
+
+/* Scroll behavior */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 rounded-full hover:bg-neutral-400;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,477 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id                   String         @id @default(cuid())
+  name                 String
+  slug                 String         @unique
+  email                String
+  phone                String
+  address              String
+  city                 String
+  state                String
+  zipCode              String
+  country              String
+  logoUrl              String?
+  aboutStory           String?
+  aboutMission         String?
+  aboutValues          String?
+  aboutStoryImage      String?
+  aboutMissionImage    String?
+  aboutValuesImage     String?
+  galleryImages        Json?
+  showGalleryOnHome    Boolean        @default(true)
+  galleryCategories    String[]       @default(["All", "Food", "Ambiance", "Events"])
+  heroImageUrl         String?
+  heroMediaType        String         @default("image")
+  heroVideoUrl         String?
+  heroImages           String[]
+  heroSlideshowEnabled Boolean        @default(false)
+  heroSlideshowInterval Int           @default(5000)
+  description          String?
+  timezone             String         @default("UTC")
+  currency             String         @default("USD")
+  isActive             Boolean        @default(true)
+  primaryColor         String         @default("#0ea5e9")
+  secondaryColor       String         @default("#f5f5f5")
+  accentColor          String         @default("#ef4444")
+  fontFamily           String         @default("Inter")
+  operatingHours       Json?
+  taxRate              Float          @default(0)
+  serviceFee           Float          @default(0)
+  minOrderValue        Float          @default(0)
+  enableDineIn         Boolean        @default(true)
+  enablePickup         Boolean        @default(true)
+  enableDelivery       Boolean        @default(true)
+  enableGuestCheckout  Boolean        @default(true)
+  autoConfirmBookings  Boolean        @default(false)
+  bookingDepositAmount Float          @default(0)
+  groqApiKey           String?
+  enableAiFeatures     Boolean        @default(false)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  pageBgColor          String         @default("#f5f5f5")
+  bodyColor            String         @default("#ffffff")
+  bodyTextColor        String         @default("#171717")
+  footerBgColor        String         @default("#171717")
+  footerTextColor      String         @default("#fafafa")
+  headerBgColor        String         @default("#ffffff")
+  headerTextColor      String         @default("#171717")
+  headerTransparentOverMedia Boolean  @default(false)
+  floorPlanImageUrl    String?
+  bookings             Booking[]
+  categories           Category[]
+  customers            Customer[]
+  deliveryZones        DeliveryZone[]
+  menuItems            MenuItem[]
+  orders               Order[]
+  promoCodes           PromoCode[]
+  settings             Setting[]
+  staff                Staff[]
+  tables               Table[]
+
+  @@index([slug])
+}
+
+model Category {
+  id           String     @id @default(cuid())
+  name         String
+  description  String?
+  imageUrl     String?
+  sortOrder    Int        @default(0)
+  isActive     Boolean    @default(true)
+  restaurantId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  menuItems    MenuItem[]
+
+  @@unique([restaurantId, name])
+  @@index([restaurantId, isActive])
+}
+
+model MenuItem {
+  id                  String               @id @default(cuid())
+  name                String
+  description         String?
+  price               Float
+  imageUrl            String?
+  isAvailable         Boolean              @default(true)
+  isVegetarian        Boolean              @default(false)
+  isVegan             Boolean              @default(false)
+  isGlutenFree        Boolean              @default(false)
+  allergens           String[]
+  prepTime            Int                  @default(15)
+  calories            Int?
+  sortOrder           Int                  @default(0)
+  categoryId          String
+  restaurantId        String
+  trackInventory      Boolean              @default(false)
+  stockQuantity       Int?
+  minStockLevel       Int?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  customizationGroups CustomizationGroup[]
+  category            Category             @relation(fields: [categoryId], references: [id])
+  restaurant          Restaurant           @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  orderItems          OrderItem[]
+
+  @@index([restaurantId, isAvailable])
+  @@index([categoryId])
+}
+
+model CustomizationGroup {
+  id            String                @id @default(cuid())
+  name          String
+  type          String
+  isRequired    Boolean               @default(false)
+  maxSelections Int                   @default(1)
+  menuItemId    String
+  sortOrder     Int                   @default(0)
+  menuItem      MenuItem              @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  options       CustomizationOption[]
+
+  @@index([menuItemId])
+}
+
+model CustomizationOption {
+  id                   String             @id @default(cuid())
+  name                 String
+  priceModifier        Float              @default(0)
+  isAvailable          Boolean            @default(true)
+  sortOrder            Int                @default(0)
+  customizationGroupId String
+  customizationGroup   CustomizationGroup @relation(fields: [customizationGroupId], references: [id], onDelete: Cascade)
+
+  @@index([customizationGroupId])
+}
+
+model Customer {
+  id                String     @id @default(cuid())
+  email             String     @unique
+  name              String
+  phone             String?
+  passwordHash      String?
+  isGuest           Boolean    @default(false)
+  profileImage      String?
+  restaurantId      String
+  preferredLanguage String     @default("en")
+  marketingConsent  Boolean    @default(false)
+  totalOrders       Int        @default(0)
+  totalSpent        Float      @default(0)
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  addresses         Address[]
+  bookings          Booking[]
+  restaurant        Restaurant @relation(fields: [restaurantId], references: [id])
+  orders            Order[]
+
+  @@index([email])
+  @@index([restaurantId])
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  customerId String
+  label      String?
+  street     String
+  city       String
+  state      String
+  zipCode    String
+  country    String
+  isDefault  Boolean  @default(false)
+  latitude   Float?
+  longitude  Float?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  orders     Order[]
+
+  @@index([customerId])
+}
+
+model Order {
+  id                    String               @id @default(cuid())
+  orderNumber           String               @unique
+  type                  OrderType
+  status                OrderStatus          @default(PENDING)
+  customerId            String
+  restaurantId          String
+  tableNumber           String?
+  pickupTime            DateTime?
+  deliveryAddressId     String?
+  deliveryFee           Float                @default(0)
+  estimatedDeliveryTime DateTime?
+  actualDeliveryTime    DateTime?
+  subtotal              Float
+  taxAmount             Float
+  serviceFee            Float                @default(0)
+  tipAmount             Float                @default(0)
+  discountAmount        Float                @default(0)
+  totalAmount           Float
+  paymentMethod         PaymentMethod
+  paymentStatus         PaymentStatus        @default(PENDING)
+  paymentIntentId       String?
+  promoCodeId           String?
+  specialInstructions   String?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  customer              Customer             @relation(fields: [customerId], references: [id])
+  deliveryAddress       Address?             @relation(fields: [deliveryAddressId], references: [id])
+  promoCode             PromoCode?           @relation(fields: [promoCodeId], references: [id])
+  restaurant            Restaurant           @relation(fields: [restaurantId], references: [id])
+  orderItems            OrderItem[]
+  statusHistory         OrderStatusHistory[]
+
+  @@index([restaurantId, status])
+  @@index([customerId])
+  @@index([createdAt])
+  @@index([restaurantId, createdAt])
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id                  String   @id @default(cuid())
+  orderId             String
+  menuItemId          String
+  name                String
+  price               Float
+  quantity            Int
+  customizations      Json?
+  specialInstructions String?
+  menuItem            MenuItem @relation(fields: [menuItemId], references: [id])
+  order               Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(cuid())
+  orderId   String
+  status    OrderStatus
+  note      String?
+  createdAt DateTime    @default(now())
+  createdBy String?
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt])
+}
+
+model Table {
+  id           String     @id @default(cuid())
+  number       String
+  capacity     Int
+  isActive     Boolean    @default(true)
+  positionX    Float?
+  positionY    Float?
+  shape        String     @default("circle")
+  width        Float      @default(80)
+  height       Float      @default(80)
+  restaurantId String
+  bookings     Booking[]
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, number])
+  @@index([restaurantId])
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  bookingNumber   String        @unique
+  status          BookingStatus @default(PENDING)
+  customerId      String
+  restaurantId    String
+  tableId         String?
+  date            DateTime
+  time            String
+  guests          Int
+  duration        Int           @default(120)
+  specialRequests String?
+  depositAmount   Float         @default(0)
+  depositPaid     Boolean       @default(false)
+  depositIntentId String?
+  reminder24hSent Boolean       @default(false)
+  reminder2hSent  Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  customer        Customer      @relation(fields: [customerId], references: [id])
+  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id])
+  table           Table?        @relation(fields: [tableId], references: [id])
+
+  @@index([restaurantId, date, status])
+  @@index([customerId])
+  @@index([date, status])
+  @@index([restaurantId, date])
+}
+
+model Staff {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  phone        String?
+  role         StaffRole
+  passwordHash String
+  isActive     Boolean    @default(true)
+  restaurantId String
+  lastLogin    DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@index([restaurantId, role])
+}
+
+model DeliveryZone {
+  id            String     @id @default(cuid())
+  name          String
+  restaurantId  String
+  zipCodes      String[]
+  centerLat     Float?
+  centerLng     Float?
+  radiusKm      Float?
+  deliveryFee   Float
+  minOrderValue Float      @default(0)
+  estimatedTime Int        @default(30)
+  isActive      Boolean    @default(true)
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@index([restaurantId])
+}
+
+model PromoCode {
+  id            String     @id @default(cuid())
+  code          String     @unique
+  description   String?
+  discountType  String
+  discountValue Float
+  minOrderValue Float      @default(0)
+  maxDiscount   Float?
+  usageLimit    Int?
+  usageCount    Int        @default(0)
+  validFrom     DateTime
+  validUntil    DateTime
+  isActive      Boolean    @default(true)
+  restaurantId  String
+  createdAt     DateTime   @default(now())
+  orders        Order[]
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@index([code, isActive])
+}
+
+model Setting {
+  id           String     @id @default(cuid())
+  key          String
+  value        String
+  restaurantId String
+  updatedAt    DateTime   @updatedAt
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, key])
+  @@index([restaurantId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  recipient String
+  subject   String?
+  message   String
+  isSent    Boolean          @default(false)
+  sentAt    DateTime?
+  metadata  Json?
+  createdAt DateTime         @default(now())
+
+  @@index([isSent, createdAt])
+}
+
+model DemandForecast {
+  id               String   @id @default(cuid())
+  restaurantId     String
+  date             DateTime
+  dayOfWeek        Int
+  predictedOrders  Int
+  predictedRevenue Float
+  peakHourStart    String
+  peakHourEnd      String
+  recommendations  Json
+  confidence       Float
+  generatedAt      DateTime @default(now())
+
+  @@unique([restaurantId, date])
+  @@index([restaurantId, date])
+}
+
+model ChatbotConversation {
+  id         String   @id @default(cuid())
+  sessionId  String   @unique
+  customerId String?
+  messages   Json
+  bookingId  String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([sessionId, isActive])
+}
+
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  PREPARING
+  READY
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  REJECTED
+}
+
+enum OrderType {
+  DINE_IN
+  PICKUP
+  DELIVERY
+}
+
+enum PaymentMethod {
+  STRIPE
+  PAYPAL
+  SQUARE
+  CASH
+  APPLE_PAY
+  GOOGLE_PAY
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum StaffRole {
+  ADMIN
+  KITCHEN
+  WAITER
+}
+
+enum NotificationType {
+  ORDER_CONFIRMATION
+  ORDER_STATUS_UPDATE
+  BOOKING_CONFIRMATION
+  BOOKING_REMINDER
+  PROMOTIONAL
+}
