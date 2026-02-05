@@ -290,7 +290,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
         
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
-        const h = 0, s = 0, l = (max + min) / 2;
+        let h = 0, s = 0, l = (max + min) / 2;
         
         if (max !== min) {
           const d = max - min;
@@ -382,7 +382,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
         
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
-        const h = 0, s = 0, l = (max + min) / 2;
+        let h = 0, s = 0, l = (max + min) / 2;
         
         if (max !== min) {
           const d = max - min;
@@ -495,7 +495,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
             
             const max = Math.max(r, g, b);
             const min = Math.min(r, g, b);
-            const h = 0, s = 0, l = (max + min) / 2;
+            let h = 0, s = 0, l = (max + min) / 2;
             
             if (max !== min) {
               const d = max - min;
